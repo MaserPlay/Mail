@@ -1,0 +1,237 @@
+﻿<adonisControls:AdonisWindow x:Class="Mail.Xamls.AddUser"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+                             xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+                             xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+                             xmlns:local="clr-namespace:Mail.Xamls"
+                             xmlns:formModel="clr-namespace:Mail.FormModel"
+                             xmlns:lang="clr-namespace:Mail.lang"
+                             xmlns:security="clr-namespace:MailKit.Security;assembly=MailKitLite"
+                             mc:Ignorable="d"
+                             WindowStartupLocation="CenterScreen"
+                             Title="AddUser" MinHeight="440" MinWidth="450" Height="780" Width="650">
+    <Window.DataContext>
+        <formModel:AddUserModel />
+    </Window.DataContext>
+    <ScrollViewer>
+        <StackPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_email}"></TextBlock>
+                <TextBox Name="email" HorizontalAlignment="Left" Width="300"
+                         adonisExtensions:WatermarkExtension.Watermark="example@example.com">
+                    <TextBox.Text>
+                        <Binding Path="email" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_urlsmtp}"></TextBlock>
+                <TextBox HorizontalAlignment="Left" Width="300"
+                         adonisExtensions:WatermarkExtension.Watermark="smtp.mail.example.com">
+                    <TextBox.Text>
+                        <Binding Path="urlmailSmtp" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_urlimap}"></TextBlock>
+                <TextBox HorizontalAlignment="Left" Width="300"
+                         adonisExtensions:WatermarkExtension.Watermark="imap.mail.example.com">
+                    <TextBox.Text>
+                        <Binding Path="urlmailImap" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <CheckBox HorizontalAlignment="Left" Width="300" Content="{x:Static lang:lang.adduser_isuseauth}"
+                          Checked="AuthCheck"
+                          Unchecked="AuthUnCheck">
+                    <CheckBox.IsChecked>
+                        <Binding Path="auth" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                        </Binding>
+                    </CheckBox.IsChecked>
+                </CheckBox>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" IsEnabled="False" Name="Auth" MinHeight="50">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_password}"></TextBlock>
+                    <PasswordBox HorizontalAlignment="Left" Width="300"
+                                 adonisExtensions:WatermarkExtension.Watermark="{x:Static lang:lang.adduser_password}" PasswordChanged="PasswordChanged">
+                    </PasswordBox>
+                </DockPanel>
+            </StackPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_encryption}"></TextBlock>
+                <ComboBox Width="300" HorizontalAlignment="Left" IsEditable="False">
+                    <ComboBoxItem Content="{x:Static lang:lang.adduser_encryption_auto}"></ComboBoxItem>
+                    <ComboBoxItem Content="None"></ComboBoxItem>
+                    <ComboBoxItem>Ssl</ComboBoxItem>
+                    <ComboBoxItem>StartTls</ComboBoxItem>
+                    <ComboBoxItem>StartTls or Tls</ComboBoxItem>
+                    <ComboBox.SelectedIndex>
+                        <Binding Path="ssl" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                        </Binding>
+                    </ComboBox.SelectedIndex>
+                </ComboBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <Expander Header="{x:Static lang:lang.adduser_advanced}">
+                    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                        <StackPanel Orientation="Horizontal">
+                            <GroupBox Header="smtp">
+                                <StackPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top">UrlMail</TextBlock>
+                                        <TextBox Name="smtp" HorizontalAlignment="Left" Width="300"
+                                                 adonisExtensions:WatermarkExtension.Watermark="smtp.mail.example.com">
+                                            <TextBox.Text>
+                                                <Binding Path="urlmailSmtp" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                                                </Binding>
+                                            </TextBox.Text>
+                                        </TextBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_port}"></TextBlock>
+                                        <TextBox Name="portsmtp" HorizontalAlignment="Left" Width="300"
+                                                 PreviewTextInput="OnlyNumbers" MaxLength="4"
+                                                 adonisExtensions:WatermarkExtension.Watermark="1234">465
+                                        </TextBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_encryption}"></TextBlock>
+                                        <ComboBox Name="IsSslsmtp" Width="300" HorizontalAlignment="Left" IsEditable="False">
+                                            <ComboBoxItem Content="{x:Static lang:lang.adduser_encryption_auto}"></ComboBoxItem>
+                                            <ComboBoxItem Content="None"></ComboBoxItem>
+                                            <ComboBoxItem>Ssl</ComboBoxItem>
+                                            <ComboBoxItem>StartTls</ComboBoxItem>
+                                            <ComboBoxItem>StartTls or Tls</ComboBoxItem>
+                                            <ComboBox.SelectedIndex>
+                                                <Binding Path="ssl" Mode="OneWay">
+                                                </Binding>
+                                            </ComboBox.SelectedIndex>
+                                        </ComboBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <CheckBox Name="IsAuthsmtp" HorizontalAlignment="Left" Width="300"
+                                                  Content="{x:Static lang:lang.adduser_isuseauth}"
+                                                  Checked="AuthChecksmtp"
+                                                  Unchecked="AuthUnChecksmtp">
+                                            <CheckBox.IsChecked>
+                                                <Binding Path="auth" Mode="OneWay" UpdateSourceTrigger="LostFocus">
+                                                </Binding>
+                                            </CheckBox.IsChecked>
+                                        </CheckBox>
+                                    </DockPanel>
+                                    <StackPanel IsEnabled="False" Name="Authsmtp" MinHeight="50">
+                                        <DockPanel MinHeight="50">
+                                            <TextBlock DockPanel.Dock="Top">Username</TextBlock>
+                                            <TextBox Name="UserNameSmtp" HorizontalAlignment="Left" Width="300"
+                                                     adonisExtensions:WatermarkExtension.Watermark="example@example.com">
+                                                <TextBox.Text>
+                                                    <Binding Path="email" Mode="OneWay" UpdateSourceTrigger="LostFocus">
+                                                        <Binding.ValidationRules>
+                                                            <DataErrorValidationRule />
+                                                        </Binding.ValidationRules>
+                                                    </Binding>
+                                                </TextBox.Text>
+                                            </TextBox>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_password}"></TextBlock>
+                                            <PasswordBox Name="Passwordsmtp" HorizontalAlignment="Left" Width="300"
+                                                         adonisExtensions:WatermarkExtension.Watermark="{x:Static lang:lang.adduser_password}">
+                                            </PasswordBox>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="imap">
+                                <StackPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top">UrlMail</TextBlock>
+                                        <TextBox Name="imap" HorizontalAlignment="Left" Width="300"
+                                                 adonisExtensions:WatermarkExtension.Watermark="imap.mail.example.com">
+                                            <TextBox.Text>
+                                                <Binding Path="urlmailImap" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                                                </Binding>
+                                            </TextBox.Text>
+                                        </TextBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_port}"></TextBlock>
+                                        <TextBox Name="portimap" HorizontalAlignment="Left" Width="300" MaxLength="4"
+                                                 PreviewTextInput="OnlyNumbers"
+                                                 adonisExtensions:WatermarkExtension.Watermark="1234">993
+                                        </TextBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_encryption}"></TextBlock>
+                                        <ComboBox Name="IsSslimap" Width="300" HorizontalAlignment="Left" IsEditable="False">
+                                            <ComboBoxItem Content="{x:Static lang:lang.adduser_encryption_auto}"></ComboBoxItem>
+                                            <ComboBoxItem Content="None"></ComboBoxItem>
+                                            <ComboBoxItem>Ssl</ComboBoxItem>
+                                            <ComboBoxItem>StartTls</ComboBoxItem>
+                                            <ComboBoxItem>StartTls or Tls</ComboBoxItem>
+                                            <ComboBox.SelectedIndex>
+                                                <Binding Path="ssl" Mode="OneWay" UpdateSourceTrigger="LostFocus">
+                                                </Binding>
+                                            </ComboBox.SelectedIndex>
+                                        </ComboBox>
+                                    </DockPanel>
+                                    <DockPanel MinHeight="50">
+                                        <CheckBox Name="IsAuthimap" HorizontalAlignment="Left" Width="300"
+                                                  Content="{x:Static lang:lang.adduser_isuseauth}"
+                                                  Checked="AuthCheckimap"
+                                                  Unchecked="AuthUnCheckimap">
+                                            <CheckBox.IsChecked>
+                                                <Binding Path="auth" Mode="OneWay" UpdateSourceTrigger="LostFocus">
+                                                </Binding>
+                                            </CheckBox.IsChecked>
+                                        </CheckBox>
+                                    </DockPanel>
+                                    <StackPanel IsEnabled="False" Name="Authimap" MinHeight="50">
+                                        <DockPanel MinHeight="50">
+                                            <TextBlock DockPanel.Dock="Top">Username</TextBlock>
+                                            <TextBox Name="UserNameImap" HorizontalAlignment="Left" Width="300"
+                                                     adonisExtensions:WatermarkExtension.Watermark="example@example.com">
+                                                <TextBox.Text>
+                                                    <Binding Path="email" Mode="OneWay" UpdateSourceTrigger="LostFocus">
+                                                        <Binding.ValidationRules>
+                                                            <DataErrorValidationRule />
+                                                        </Binding.ValidationRules>
+                                                    </Binding>
+                                                </TextBox.Text>
+                                            </TextBox>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.adduser_password}"></TextBlock>
+                                            <PasswordBox Name="Passwordimap" HorizontalAlignment="Left" Width="300"
+                                                         adonisExtensions:WatermarkExtension.Watermark="{x:Static lang:lang.adduser_password}">
+                                            </PasswordBox>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Expander>
+            </DockPanel>
+            <Button Name="ok" Width="150" Height="30" PreviewMouseDown="Ok" Content="{x:Static lang:lang.adduser_checkadd}"></Button>
+        </StackPanel>
+    </ScrollViewer>
+</adonisControls:AdonisWindow>

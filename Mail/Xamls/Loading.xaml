@@ -1,0 +1,10 @@
+﻿<Window x:Class="Mail.Xamls.Loading"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Mail.Xamls"
+        mc:Ignorable="d"
+        Title="Loading" Height="70" WindowStartupLocation="CenterScreen" Width="500" WindowStyle="None" ResizeMode="NoResize">
+    <ProgressBar Minimum="0" Maximum="100" IsIndeterminate="True" Height="25" VerticalAlignment="Center" ></ProgressBar>
+</Window>
