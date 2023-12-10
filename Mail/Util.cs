@@ -7,7 +7,7 @@ namespace Mail;
 public static class Util
 {
 
-    public async static Task WaitWindow()
+    public static async Task WaitWindow()
     {
         var semaphore = new Semaphore(1, 1);
         semaphore.WaitOne();

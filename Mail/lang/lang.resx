@@ -294,4 +294,7 @@
   <data name="error_descr" xml:space="preserve">
     <value>An error has occurred in the application. Would you like to send a reply to the author?</value>
   </data>
+  <data name="message_default" xml:space="preserve">
+    <value>&lt;h1&gt;Welcome to MailAppWpf!&lt;/h1&gt;&lt;p&gt;  This is a &lt;b&gt; beta &lt;/b&gt; version of the email client based on wpf. All emails  open in Internet Explorer, I know that, I want to fix it. But it's very  difficult, and I think it's impossible. You can add your mailbox by clicking  on Users -&gt; add a user. If you find any errors, just send them to help -&gt; send  feedback.&lt;/p&gt;</value>
+  </data>
 </root>

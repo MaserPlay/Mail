@@ -8,6 +8,9 @@
     <Setting Name="ConnectionTime" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
+    <Setting Name="Theme" Type="System.Bool" Scope="User">
+      <Value Profile="(Default)">false</Value>
+    </Setting>
     <Setting Name="PickMail" Type="System.String" Scope="User">
       <Value Profile="(Default)">sounds/NewMail.wav</Value>
     </Setting>

@@ -11,7 +11,7 @@
                              xmlns:lang="clr-namespace:Mail.lang"
                              xmlns:security="clr-namespace:MailKit.Security;assembly=MailKitLite"
                              mc:Ignorable="d"
-                             Title="CreateMessage" Height="450" Width="800">
+                             Title="CreateMessage" MinWidth="300" MinHeight="300" Height="450" Width="800" ContentRendered="CreateMessage_OnContentRendered">
     <Window.DataContext>
         <formModel:CreateModel />
     </Window.DataContext>
@@ -19,45 +19,53 @@
         <Button DockPanel.Dock="Bottom" Name="ok" Width="150" Height="30"
                 VerticalAlignment="Bottom" PreviewMouseDown="Send" Content="{x:Static lang:lang.message_send}">
         </Button>
-        <ScrollViewer>
-            <StackPanel>
-                <DockPanel MinHeight="50">
-                    <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_from}"></TextBlock>
-                    <ComboBox IsEditable="False" Name="from" HorizontalAlignment="Left" Width="300" SelectedIndex="0">
-                    </ComboBox>
-                </DockPanel>
-                <DockPanel MinHeight="50">
-                    <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_to}"></TextBlock>
-                    <TextBox Name="to" HorizontalAlignment="Left" Width="300"
-                             adonisExtensions:WatermarkExtension.Watermark="to@example.com">
-                        <TextBox.Text>
-                            <Binding Path="to" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
-                                <Binding.ValidationRules>
-                                    <DataErrorValidationRule />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                </DockPanel>
-                <DockPanel MinHeight="50">
-                    <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_theme}"></TextBlock>
-                    <TextBox Name="theme" HorizontalAlignment="Left" Width="300">
-                    </TextBox>
-                </DockPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Width="23" PreviewMouseDown="Bold">
-                        <Bold>B</Bold>
-                    </Button>
-                    <Button Width="23" PreviewMouseDown="Italic">
-                        <Italic>I</Italic>
-                    </Button>
-                    <Button Width="23" PreviewMouseDown="Underline">
-                        <Underline>U</Underline>
-                    </Button>
-                </StackPanel>
-                <TextBox Name="TextBox1" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"></TextBox>
-
+        <StackPanel DockPanel.Dock="Top">
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_from}"></TextBlock>
+                <ComboBox IsEditable="False" Name="from" HorizontalAlignment="Left" Width="300"
+                          SelectedIndex="0">
+                </ComboBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_to}"></TextBlock>
+                <TextBox Name="to" HorizontalAlignment="Left" Width="300"
+                         adonisExtensions:WatermarkExtension.Watermark="to@example.com">
+                    <TextBox.Text>
+                        <Binding Path="to" Mode="TwoWay" UpdateSourceTrigger="LostFocus">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </DockPanel>
+            <DockPanel MinHeight="50">
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static lang:lang.message_theme}"></TextBlock>
+                <TextBox Name="theme" HorizontalAlignment="Left" Width="300">
+                </TextBox>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Width="24" PreviewMouseDown="Bold">
+                    <Bold>B</Bold>
+                </Button>
+                <Button Width="24" PreviewMouseDown="Italic">
+                    <Italic>I</Italic>
+                </Button>
+                <Button Width="24" PreviewMouseDown="Underline">
+                    <Underline>U</Underline>
+                </Button>
+                <Button Width="24" PreviewMouseDown="Normal">
+                    N
+                </Button>
             </StackPanel>
+
+        </StackPanel>
+        <ScrollViewer>
+            <RichTextBox Name="TextBox1" AcceptsReturn="True" AcceptsTab="True">
+                <FlowDocument>
+                    
+                </FlowDocument>
+            </RichTextBox>
         </ScrollViewer>
 
     </DockPanel>

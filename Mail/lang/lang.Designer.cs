@@ -412,6 +412,15 @@ namespace Mail.lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;h1&gt;Welcome to MailAppWpf!&lt;/h1&gt;&lt;p&gt;  This is a &lt;b&gt; beta &lt;/b&gt; version of the email client based on wpf. All emails  open in Internet Explorer, I know that, I want to fix it. But it&apos;s very  difficult, and I think it&apos;s impossible. You can add your mailbox by clicking  on Users -&gt; add a user. If you find any errors, just send them to help -&gt; send  feedback.&lt;/p&gt;.
+        /// </summary>
+        public static string message_default {
+            get {
+                return ResourceManager.GetString("message_default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From.
         /// </summary>
         public static string message_from {

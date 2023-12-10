@@ -4,7 +4,7 @@
 #define MyAppName "MailApp"
 #define MyAppVersion "0.1"
 #define MyAppPublisher "MaserPlay"
-#define MyAppURL "https://www.example.com/"
+#define MyAppURL "https://maserplay.ru/Project/Mail"
 #define MyAppExeName "Mail.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".mailto"
@@ -31,6 +31,9 @@ OutputBaseFilename=mysetup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+WizardImageFile=D:\Users\super\RiderProjects\MailWpf\Mail\images\ico.bmp
+WizardSmallImageFile=D:\Users\super\RiderProjects\MailWpf\Mail\images\icosmall.bmp
+SetupIconFile=D:\Users\super\RiderProjects\MailWpf\Mail\images\ico.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

@@ -1,31 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Linq;
 using AdonisUI.Controls;
 using Mail.Connection;
 using Mail.Sqllite;
 using MailKit;
 using MimeKit;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace Mail.Xamls;
 
 public partial class CreateMessage : AdonisWindow
 {
-    public CreateMessage(string? to, string? theme, string? body) : this()
+    public CreateMessage(string? to = null, string? theme = null, string? body = null) : this()
     {
-        TextBox1.Text = body ?? "";
+        //TextBox1.Text = body ?? "";
         this.theme.Text = theme ?? "";
         this.to.Text = to ?? "";
     }
 
-    public CreateMessage()
+    private CreateMessage()
     {
         InitializeComponent();
         foreach (var user in SqlContextWrapper<List<User>>.exec(func: context => context.Users.ToList()))
@@ -36,17 +42,55 @@ public partial class CreateMessage : AdonisWindow
 
     private void Bold(object sender, MouseButtonEventArgs e)
     {
-        TextBox1.SelectedText = "<B>" + TextBox1.SelectedText + "</B>";
+        //string Richtextvalue = new TextRange(TextBox1.Document.ContentStart, TextBox1.Document.ContentEnd).Text;
+        string text = TextBox1.Selection.Text;
+        TextBox1.Selection.Text = "";
+        TextBox1.BeginChange();
+        new Run(text, TextBox1.Selection.Start)
+        {
+            FontWeight = FontWeights.Bold
+        };
+
+        TextBox1.EndChange();
+        //TextBox1.SelectedText = "<B>" + TextBox1.SelectedText + "</B>";
     }
 
     private void Italic(object sender, MouseButtonEventArgs e)
     {
-        TextBox1.SelectedText = "<I>" + TextBox1.SelectedText + "</I>";
+        string text = TextBox1.Selection.Text;
+        TextBox1.Selection.Text = "";
+        TextBox1.BeginChange();
+        new Run(text, TextBox1.Selection.Start)
+        {
+            FontStyle = FontStyles.Italic
+        };
+
+        TextBox1.EndChange();
+        //TextBox1.SelectedText = "<I>" + TextBox1.SelectedText + "</I>";
     }
 
     private void Underline(object sender, MouseButtonEventArgs e)
     {
-        TextBox1.SelectedText = "<U>" + TextBox1.SelectedText + "</U>";
+        string text = TextBox1.Selection.Text;
+        TextBox1.Selection.Text = "";
+        TextBox1.BeginChange();
+        new Run(text, TextBox1.Selection.Start)
+        {
+            TextDecorations = TextDecorations.Underline
+        };
+
+        TextBox1.EndChange();
+        //TextBox1.SelectedText = "<U>" + TextBox1.SelectedText + "</U>";
+    }
+
+    private void Normal(object sender, MouseButtonEventArgs e)
+    {
+        string text = TextBox1.Selection.Text;
+        TextBox1.Selection.Text = "";
+        TextBox1.BeginChange();
+        new Run(text, TextBox1.Selection.Start);
+
+        TextBox1.EndChange();
     }
 
     private void Send(object sender, MouseButtonEventArgs e)
@@ -58,6 +102,7 @@ public partial class CreateMessage : AdonisWindow
     {
         try
         {
+            ok.Focus();
             ok.IsEnabled = false;
             if (Validation.GetHasError(to))
             {
@@ -76,10 +121,41 @@ public partial class CreateMessage : AdonisWindow
             message.From.Add(new MailboxAddress(fromadr, fromadr));
             message.To.Add(new MailboxAddress(to.Text, to.Text));
             message.Subject = theme.Text;
+            TextRange range = new TextRange(TextBox1.Document.ContentStart, TextBox1.Document.ContentEnd);
+            MemoryStream stream = new MemoryStream();
+            range.Save(stream, DataFormats.Xaml);
+            string xamlText = Encoding.UTF8.GetString(stream.ToArray());
+            XDocument xDocument = new XDocument(XDocument.Parse(xamlText));
+            xDocument.Root.Name = "p";
+            xDocument.Root.RemoveAttributes();
+            if (xDocument.Root.Elements().Count() > 0)
+            {
+                xDocument.Root.Elements().First().Name = "p";
+                foreach (var xElement in xDocument.Root.Elements().First().Elements())
+                {
+                    if (xElement.Attribute("FontWeight") != null &&
+                        xElement.Attribute("FontWeight").Value.ToString() == "Bold")
+                    {
+                        xElement.Attributes().Remove();
+                        xElement.Name = "B";
+                    }
+                    else if (xElement.Attribute("TextDecorations") != null &&
+                             xElement.Attribute("TextDecorations").Value.ToString() == "Underline")
+                    {
+                        xElement.Attributes().Remove();
+                        xElement.Name = "U";
+                    }
+                    else
+                    {
+                        xElement.Attributes().Remove();
+                        xElement.Name = "span";
+                    }
+                }
+            }
 
             message.Body = new TextPart("html")
             {
-                Text = TextBox1.Text
+                Text = xDocument.Document.ToString()
             };
             await connection.SendAsync(message);
             await connection.CloseAsync();
@@ -91,5 +167,14 @@ public partial class CreateMessage : AdonisWindow
         {
             MessageBox.Show(e.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+
+    private void CreateMessage_OnContentRendered(object? sender, EventArgs e)
+    {
+        if (from.Items.Count > 0) return;
+        MessageBox.Show("Need to add user!", "Need to add user!", MessageBoxButton.OK,
+            MessageBoxImage.Warning);
+        Close();
     }
 }

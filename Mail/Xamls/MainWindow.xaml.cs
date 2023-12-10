@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using AdonisUI;
 using AdonisUI.Controls;
 using AdonisUI.Extensions;
 using Mail.FormModel;
@@ -50,7 +51,7 @@ namespace Mail.Xamls
             From = "admin@maserplay.ru",
             To = "user@maserplay.ru",
             Theme = "Welcome to MailApp!",
-            Html = "<h1>Welcome to MailAppWpf!</h1>\n<p>\n  This is a <b> beta </b> version of the email client based on wpf. All emails\n  open in Internet Explorer, I know that, I want to fix it. But it's very\n  difficult, and I think it's impossible. You can add your mailbox by clicking\n  on Users -> add a user. If you find any errors, just send them to help -> send\n  feedback.\n</p>\n"
+            Html = lang.lang.message_default
         };
 
         private readonly Sqllite.User _defaultUser = new Sqllite.User
@@ -72,12 +73,10 @@ namespace Mail.Xamls
             HasUnread = true
         };
 
-        private SoundPlayer player = new(Settings1.Default.PickMail);
-
         public MainWindow()
         {
             InitializeComponent();
-            Update();
+            new UpdateApp().UpdateASync();
         }
 
         private void OpenAddUser(object sender, object e)
@@ -155,7 +154,7 @@ namespace Mail.Xamls
 
         private void CreateMessage(object sender, MouseButtonEventArgs e)
         {
-            new CreateMessage().ShowDialog();
+            new CreateMessage().Show();
         }
 
         private void CheckUsers(object? sender, object? e)
@@ -303,47 +302,7 @@ namespace Mail.Xamls
 
         private void OpenOptions(object sender, MouseButtonEventArgs e)
         {
-            new Settings().ShowDialog();
-        }
-
-        async Task Update()
-        {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(Constants.UpdateString);
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            var update = JsonSerializer.Deserialize<Update>(responseBody);
-            if (update != null)
-            {
-                if (int.Parse(update.latestVersionCode) > Constants.VersionCode)
-                {
-                    var notificationManager = new NotificationManager();
-                    var notificationContent = new NotificationContent
-                    {
-                        Title = lang.lang.version_available,
-                        Message = string.Format(lang.lang.version_availablem, update.latestVersion),
-                        Type = NotificationType.Warning
-                    };
-                    await notificationManager.ShowAsync(notificationContent,
-                        onClick: () =>
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = update.url,
-                                UseShellExecute = true
-                            }));
-                    player.Play();
-                }
-            }
-            else
-            {
-                var notificationManager = new NotificationManager();
-                var notificationContent = new NotificationContent
-                {
-                    Title = lang.lang.version_error,
-                    Type = NotificationType.Error
-                };
-                await notificationManager.ShowAsync(notificationContent);
-            }
+            new Settings().Show();
         }
 
         private void About(object sender, MouseButtonEventArgs e)
@@ -373,12 +332,12 @@ namespace Mail.Xamls
 
         private void UpdatesCheck(object sender, MouseButtonEventArgs e)
         {
-            Update();
+            new UpdateApp().UpdateASync();
         }
 
         private void SendFeedback(object sender, MouseButtonEventArgs e)
         {
-            new SendFeedback().ShowDialog();
+            new SendFeedback().Show();
         }
 
         private void WebBrowser_loaded(object sender, RoutedEventArgs e)
@@ -427,6 +386,12 @@ namespace Mail.Xamls
 
             MessageBox.Items.Add(listBoxItem);
             MessageBox.SelectedIndex = 0;
+        }
+
+        private void ChangeTheme(object sender, MouseButtonEventArgs e)
+        {
+            ResourceLocator.SetColorScheme(Application.Current.Resources, Settings1.Default.Theme ? ResourceLocator.LightColorScheme : ResourceLocator.DarkColorScheme);
+            Settings1.Default.Theme = !Settings1.Default.Theme;
         }
     }
 }

@@ -8,7 +8,8 @@
                              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
                              xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
                              xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-                             mc:Ignorable="d" MinHeight="400" MinWidth="1300" Height="600" Width="1300" ShowInTaskbar="True"
+                             mc:Ignorable="d" MinHeight="400" MinWidth="1300" Height="600" Width="1300"
+                             ShowInTaskbar="True"
                              Loaded="MainWindow_OnLoaded">
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="LightGray">
@@ -27,6 +28,9 @@
                 <MenuItem Header="{x:Static lang:lang.help_options}" PreviewMouseDown="OpenOptions"></MenuItem>
                 <MenuItem Header="{x:Static lang:lang.help_check}" PreviewMouseDown="UpdatesCheck"></MenuItem>
                 <MenuItem Header="{x:Static lang:lang.help_about}" PreviewMouseDown="About"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Ui">
+                <MenuItem Header="Change light &lt;-&gt; dark theme" PreviewMouseDown="ChangeTheme"></MenuItem>
             </MenuItem>
         </Menu>
         <Canvas Background="LightGray" DockPanel.Dock="Bottom" Height="15">

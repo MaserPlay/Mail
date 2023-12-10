@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace Mail.FormModel;
 
@@ -24,7 +25,6 @@ public class CreateModel : IDataErrorInfo
                     {
                         error = "To TextBox dont have Email";
                     }
-
                     break;
             }
 

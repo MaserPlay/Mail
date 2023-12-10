@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +29,7 @@ namespace Mail.Xamls
             using var dbContext = new SqlContext(options);
             dbContext.Database.Migrate();
             CheckMail.CheckAllWhiteInfiniteDelayAsync(new CancellationToken());
-            DispatcherUnhandledException += new System.Windows.Threading.DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
         }
 
         void App_DispatcherUnhandledException(object sender,
@@ -62,6 +64,9 @@ namespace Mail.Xamls
                                 queryDictionary["body"])
                             .Show();
                         return;
+                    } else if (arg == "debug")
+                    {
+                        DispatcherUnhandledException -= App_DispatcherUnhandledException;
                     }
                 }
 
@@ -69,5 +74,6 @@ namespace Mail.Xamls
         }
     }
 
-    public record Update(string latestVersion, string latestVersionCode, string url, string[] releaseNotes);
+
+    public record Update(string LatestVersion, string LatestVersionCode, string url, string[] ReleaseNotes);
 }
